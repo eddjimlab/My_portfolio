@@ -66,15 +66,25 @@
 export default {
   data () {
     return {
-      items: []
+      items: [],
+      requestUrl: 'http://localhost:3000/items/'
     }
   },
   methods: {
     getItems () {
-      this.resource.get().then(response => response.json())
-        .then(items => {
-          this.items = items
-        })
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.open('GET', 'http://localhost:3000/items/')
+        xhr.send()
+        xhr.responseType = 'json'
+        xhr.onload = () => {
+          if (xhr.status.ok) {
+            reject(xhr.response)
+          } else {
+            resolve(xhr.response)
+          }
+        }
+      })
     },
     deleteItem (item) {
       this.$http.delete('items' + '/' + item.id).then(res => {
@@ -82,13 +92,12 @@ export default {
       })
     }
   },
-  created () {
-    this.resource = this.$resource('items/')
+  // created () {
+  //   this.getItems()
+  // },
+  mounted () {
     this.getItems()
   }
-  // mounted () {
-  //   this.getItems()
-  // }
 }
 </script>
 <style lang="scss" scoped>
