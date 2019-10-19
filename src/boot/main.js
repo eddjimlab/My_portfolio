@@ -1,11 +1,5 @@
-import db from '../db/db'
-export default function getItems () {
-  let img = ''
-  let itemBackground = ''
-  db.myItems.forEach(item => {
-    img = item.img
-    itemBackground = item.background
-    console.log(img)
-    console.log(itemBackground)
-  })
-}
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+
+Vue.use(VueResource)
+Vue.http.options.root = 'http://localhost:3000/'

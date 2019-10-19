@@ -3,14 +3,14 @@
     <app-header />
     <q-page-container>
       <div
-        v-for="(item,i) in items"
-        :key="i"
+        v-for="item in items"
+        :key="item.id"
         class="row item"
         :style="{background: item.background}"
       >
         <div class="col-8 item_wrap">
           <q-img
-            :src="item.img"
+            :src="`/statics/${item.img}`"
             spinner-color="white"
             class="item_wrap_image"
           />
@@ -20,7 +20,7 @@
             bordered
             class="wrap_my-card"
           >
-            <q-card-section>
+            <q-card-section id="card">
               <div class="text-h4">{{item.title}}</div>
               <q-card-section>{{ item.desc1 }}</q-card-section>
               <q-card-section>{{ item.desc2 }}</q-card-section>
@@ -29,16 +29,33 @@
 
               <q-separator inset />
               <q-item
-              v-if="item.url!=='#'"
+                v-if="item.url!=='#'"
                 clickable
                 tag="a"
                 target="_blank"
                 :href="item.url"
               >{{item.url}} </q-item>
+
             </q-card-section>
 
           </q-card>
+
         </div>
+        <!-- <q-btn
+          id="btnU"
+          flat
+          size="xs"
+          color="warning"
+          label="Update"
+          @click="updateItem"
+        /> -->
+        <q-btn
+          id="btnD"
+          size="sm"
+          color="deep-orange"
+          label="Delete"
+          @click="deleteItem(item)"
+        />
       </div>
       <router-view />
     </q-page-container>
@@ -49,46 +66,29 @@
 export default {
   data () {
     return {
-      url: 'statics/item1.png',
-      lorem: 'Lorem lorem lorem lorem lorem',
-      items: [
-        {
-          title: 'Твой Новый Дом',
-          url: 'https://myhome.spb.ru',
-          img: 'statics/item1.png',
-          background: '#ac3b66',
-          color: 'white',
-          desc1:
-            'Сайт риэлтора, листинг объектов, блог, автопубликация в соц.сетях',
-          desc2: 'Word Press',
-          desc3: 'Scss, Gulp, PHP',
-          desc4: 'Разработка шаблона, адапитная верстка.'
-        },
-        {
-          title: 'MyHome',
-          url: '#',
-          img: 'statics/item2.png',
-          color: 'White',
-          background: 'rgb(73, 170, 244)',
-          desc1: 'Сайт риэлтора',
-          desc2: 'Node js, express, MongoDb, ejs',
-          desc3: 'Passport, nodemailer',
-          desc4: 'Фронт и бэк энд разработка сайта, адаптивная верстка'
-        },
-        {
-          title: 'O-ZONE',
-          url: '#',
-          img: 'statics/item3.png',
-          color: 'White',
-          background: '#005bff',
-          desc1: 'Проект интернет магазина',
-          desc2: 'Js, Fetch API',
-          desc3: 'Webpack',
-          desc4: 'Фронт и бэк энд разработка сайта'
-        }
-      ]
+      items: []
     }
+  },
+  methods: {
+    getItems () {
+      this.resource.get().then(response => response.json())
+        .then(items => {
+          this.items = items
+        })
+    },
+    deleteItem (item) {
+      this.$http.delete('items' + '/' + item.id).then(res => {
+        this.getItems()
+      })
+    }
+  },
+  created () {
+    this.resource = this.$resource('items/')
+    this.getItems()
   }
+  // mounted () {
+  //   this.getItems()
+  // }
 }
 </script>
 <style lang="scss" scoped>
@@ -97,6 +97,7 @@ export default {
   display: flex;
   flex-direction: row;
   min-height: 100vh;
+  position: relative;
   &_wrap {
     display: flex;
     flex-direction: column;
@@ -119,5 +120,14 @@ export default {
     max-width: 30vw;
     height: 70vh;
   }
+}
+#btnU {
+  position: absolute;
+  bottom: 0;
+}
+#btnD {
+  position: absolute;
+  bottom: 0;
+  right: rem;
 }
 </style>

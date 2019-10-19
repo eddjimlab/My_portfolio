@@ -18,6 +18,10 @@ const routes = [
   {
     path: '/contacts',
     component: () => import('pages/Contacts.vue')
+  },
+  {
+    path: '/form',
+    component: () => import('pages/Form.vue')
   }
 ]
 

@@ -11,6 +11,7 @@
           <q-route-tab name="Port" label="Портфолио" to="port" />
           <q-route-tab name="About" label="Обо мне" to="about" />
           <q-route-tab name="Contacts" label="Котнакты" to="contacts" />
+          <q-route-tab name="Form" label="Form" to="form" />
         </q-tabs>
       </q-toolbar>
     </q-header>
