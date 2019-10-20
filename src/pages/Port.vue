@@ -76,6 +76,9 @@ export default {
         .then(response => {
           if (response.ok) {
             return response.json()
+              .then(items => {
+                this.items = items
+              })
           } else {
             return response.json().then(error => {
               const e = new Error('Что то пошло не так, ошибка:' + response.status)
