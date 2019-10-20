@@ -72,19 +72,18 @@ export default {
   },
   methods: {
     getItems () {
-      return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
-        xhr.open('GET', 'http://localhost:3000/items/')
-        xhr.send()
-        xhr.responseType = 'json'
-        xhr.onload = () => {
-          if (xhr.status.ok) {
-            reject(xhr.response)
+      return fetch('http://localhost:3000/items/')
+        .then(response => {
+          if (response.ok) {
+            return response.json()
           } else {
-            resolve(xhr.response)
+            return response.json().then(error => {
+              const e = new Error('Что то пошло не так, ошибка:' + response.status)
+              e.data = error
+              throw e
+            })
           }
-        }
-      })
+        })
     },
     deleteItem (item) {
       this.$http.delete('items' + '/' + item.id).then(res => {
