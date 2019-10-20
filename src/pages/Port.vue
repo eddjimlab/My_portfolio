@@ -97,6 +97,9 @@ export default {
   // },
   mounted () {
     this.getItems()
+      .then(items => {
+        this.items = items
+      })
   }
 }
 </script>
