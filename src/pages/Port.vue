@@ -66,13 +66,12 @@
 export default {
   data () {
     return {
-      items: [],
-      requestUrl: 'http://localhost:3000/items/'
+      items: []
     }
   },
   methods: {
     getItems () {
-      return fetch('http://localhost:3000/items/')
+      return fetch(this.$urlReq)
         .then(response => {
           if (response.ok) {
             return response.json()
@@ -89,8 +88,21 @@ export default {
         })
     },
     deleteItem (item) {
-      this.$http.delete('items' + '/' + item.id).then(res => {
-        this.getItems()
+      return fetch(this.$urlReq + item.id, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          this.$router.go()
+        } else {
+          return response.json().then(error => {
+            const e = new Error('Что то пошло не так, ошибка: ' + response.status)
+            e.data = error
+            throw e
+          })
+        }
       })
     }
   },

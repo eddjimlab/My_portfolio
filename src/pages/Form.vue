@@ -117,19 +117,26 @@ export default {
         desc3: this.desc3,
         desc4: this.desc4
       }
-      // this.$http.post('items', item)
-      //   .then(response => {
-      //     console.log(response)
-      //     return response.json()
-      //   })
-      //   .then(newItem => {
-      //     console.log(newItem)
-      //   })
-      this.resource.save({}, item)
+      const headers = {
+        'Content-Type': 'application/json'
+      }
+      return fetch(this.$urlReq, {
+        method: 'POST',
+        body: JSON.stringify(item),
+        headers: headers
+      }).then(response => {
+        if (response.ok) {
+          this.$router.push('port')
+          return response.json()
+        } else {
+          return response.json().then(error => {
+            const e = new Error('Что то пошло не так, ошибка: ' + response.status)
+            e.data = error
+            throw e
+          })
+        }
+      })
     }
-  },
-  created () {
-    this.resource = this.$resource('items')
   }
 }
 </script>
