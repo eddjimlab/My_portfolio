@@ -70,47 +70,58 @@ export default {
     }
   },
   methods: {
-    getItems () {
-      return fetch(this.$urlReq)
+    deleteItem (item) {
+      this.$axios
+        .delete(this.$urlReq + item.id)
         .then(response => {
-          if (response.ok) {
-            return response.json()
-              .then(items => {
-                this.items = items
-              })
-          } else {
-            return response.json().then(error => {
-              const e = new Error('Что то пошло не так, ошибка:' + response.status)
-              e.data = error
-              throw e
-            })
+          if (response.statusText === 'OK') {
+            this.$router.go()
           }
         })
-    },
-    deleteItem (item) {
-      return fetch(this.$urlReq + item.id, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(response => {
-        if (response.ok) {
-          this.$router.go()
-        } else {
-          return response.json().then(error => {
-            const e = new Error('Что то пошло не так, ошибка: ' + response.status)
-            e.data = error
-            throw e
-          })
-        }
-      })
+        .catch(error => {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request)
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message)
+          }
+          console.log(error.config)
+        })
     }
   },
-  // created () {
-  //   this.getItems()
-  // },
   mounted () {
-    this.getItems()
+    this.$axios
+      .get(this.$urlReq)
+      .then(res => {
+        this.items = res.data
+      })
+      .catch(error => {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+        console.log(error.config)
+      })
   }
 }
 </script>

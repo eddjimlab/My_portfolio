@@ -1,6 +1,5 @@
 import Vue from 'vue'
-import VueResource from 'vue-resource'
+import Axios from 'axios'
 
-Vue.use(VueResource)
-Vue.http.options.root = 'http://localhost:3000/'
+Vue.prototype.$axios = Axios
 Vue.prototype.$urlReq = 'http://localhost:3000/items/'

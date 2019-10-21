@@ -117,25 +117,15 @@ export default {
         desc3: this.desc3,
         desc4: this.desc4
       }
-      const headers = {
-        'Content-Type': 'application/json'
-      }
-      return fetch(this.$urlReq, {
-        method: 'POST',
-        body: JSON.stringify(item),
-        headers: headers
-      }).then(response => {
-        if (response.ok) {
-          this.$router.push('port')
-          return response.json()
-        } else {
-          return response.json().then(error => {
-            const e = new Error('Что то пошло не так, ошибка: ' + response.status)
-            e.data = error
-            throw e
-          })
-        }
-      })
+      this.$axios
+        .post(this.$urlReq, item)
+        .then(response => {
+          this.item = response.data
+          if (response.status === 201) {
+            this.$router.push('port')
+          }
+        })
+        .catch(err => console.log(err))
     }
   }
 }
