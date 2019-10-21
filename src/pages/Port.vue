@@ -41,14 +41,13 @@
           </q-card>
 
         </div>
-        <!-- <q-btn
+        <q-btn
           id="btnU"
-          flat
-          size="xs"
+          size="sm"
           color="warning"
           label="Update"
-          @click="updateItem"
-        /> -->
+          @click="updateItem(item)"
+        />
         <q-btn
           id="btnD"
           size="sm"
@@ -74,7 +73,7 @@ export default {
     getItems () {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
-        xhr.open('GET', 'http://localhost:3000/items/')
+        xhr.open('GET', 'http://localhost:3000/items/', true)
         xhr.send()
         xhr.responseType = 'json'
         xhr.onload = () => {
@@ -87,14 +86,38 @@ export default {
       })
     },
     deleteItem (item) {
-      this.$http.delete('items' + '/' + item.id).then(res => {
-        this.getItems()
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.open('DELETE', 'http://localhost:3000/items/' + item.id, true)
+        xhr.send()
+        xhr.responseType = 'json'
+        xhr.onload = () => {
+          if (xhr.status.ok) {
+            reject(xhr.response)
+          } else {
+            resolve(xhr.response)
+            this.$router.go()
+          }
+        }
+      })
+    },
+    updateItem (item) {
+      this.$router.push('form')
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.open('GET', 'http://localhost:3000/items/' + item.id, true)
+        xhr.send()
+        xhr.responseType = 'json'
+        xhr.onload = () => {
+          if (xhr.status.ok) {
+            reject(xhr.response)
+          } else {
+            resolve(xhr.response)
+          }
+        }
       })
     }
   },
-  // created () {
-  //   this.getItems()
-  // },
   mounted () {
     this.getItems()
       .then(items => {
@@ -136,10 +159,11 @@ export default {
 #btnU {
   position: absolute;
   bottom: 0;
+  left: 2rem;
 }
 #btnD {
   position: absolute;
   bottom: 0;
-  right: rem;
+  right: 2rem;
 }
 </style>

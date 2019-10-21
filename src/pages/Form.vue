@@ -117,19 +117,27 @@ export default {
         desc3: this.desc3,
         desc4: this.desc4
       }
-      // this.$http.post('items', item)
-      //   .then(response => {
-      //     console.log(response)
-      //     return response.json()
-      //   })
-      //   .then(newItem => {
-      //     console.log(newItem)
-      //   })
-      this.resource.save({}, item)
+      const url = 'http://localhost:3000/items/'
+      const method = 'POST'
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.open(method, url)
+        xhr.responseType = 'json'
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.send(JSON.stringify(item))
+        xhr.onload = () => {
+          if (xhr.response >= 400) {
+            reject(xhr.responseType)
+          } else {
+            resolve(xhr.response)
+            this.$router.push('port')
+          }
+        }
+        xhr.onerror = () => {
+          reject(xhr.reponse)
+        }
+      })
     }
-  },
-  created () {
-    this.resource = this.$resource('items')
   }
 }
 </script>
