@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Axios from 'axios'
+import VueResource from 'vue-resource'
 
-Vue.use(Axios)
+Vue.use(VueResource)
 Vue.http.options.root = 'http://localhost:3000/'
