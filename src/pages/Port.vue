@@ -78,7 +78,7 @@ export default {
     },
     deleteItem (item) {
       this.$http.delete('items' + '/' + item.id).then(res => {
-        this.getItems()
+        this.$router.go()
       })
     }
   },

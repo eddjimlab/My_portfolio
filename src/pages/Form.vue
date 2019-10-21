@@ -126,6 +126,8 @@ export default {
       //     console.log(newItem)
       //   })
       this.resource.save({}, item)
+      this.$router.push('port')
+      this.$router.go()
     }
   },
   created () {
