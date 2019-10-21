@@ -71,10 +71,11 @@ export default {
   },
   methods: {
     getItems () {
-      this.resource.get().then(response => response.json())
-        .then(items => {
-          this.items = items
-        })
+      axios.get(url)
+      // this.resource.get().then(response => response.json())
+      //   .then(items => {
+      //     this.items = items
+      //   })
     },
     deleteItem (item) {
       this.$http.delete('items' + '/' + item.id).then(res => {
